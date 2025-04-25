@@ -1,0 +1,4 @@
+apiVersion: v1
+name: demo
+description: A helm chart to demo k8s-manager
+version: 0.1.0

@@ -1,18 +1,29 @@
-update_kubeconfig: 
-  command: export KUBECONFIG={}
-check_cluster_connection: 
-  command: kubectl cluster-info
-  success: Connected to Kubernetes cluster.
-  failure: Failed to connect to cluster.
-check_helm: 
-  command: helm version
-install_helm: 
-  command: curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && chmod 700 get_helm.sh && ./get_helm.sh
-  success: Successfully installed helm.
-  failure: Failed to install helm.
-check_keda: 
-  command: helm search repo kedacore
-install_keda: 
-  command: helm repo add kedacore https://kedacore.github.io/charts && helm repo install && helm install keda kedacore/keda --namespace keda --create-namespace
-  success: Successfully installed keda.
-  failure: Failed to install keda.
+connect:
+
+  update_kubeconfig: 
+    command: export KUBECONFIG={}
+
+  check_cluster_connection: 
+    command: kubectl cluster-info
+    success: Connected to Kubernetes cluster.
+    failure: Failed to connect to cluster.
+
+  check_helm: 
+    command: helm version
+
+  install_helm: 
+    command: curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && chmod 700 get_helm.sh && ./get_helm.sh
+    success: Successfully installed helm.
+    failure: Failed to install helm.
+
+  check_keda: 
+    command: helm search repo kedacore
+
+  install_keda: 
+    command: helm repo add kedacore https://kedacore.github.io/charts && helm repo install && helm install keda kedacore/keda --namespace keda --create-namespace
+    success: Successfully installed keda.
+    failure: Failed to install keda.
+  
+deploy:
+  command: helm install {} {} --create-namespace 
+

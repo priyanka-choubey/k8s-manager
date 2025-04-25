@@ -1,7 +1,7 @@
-import subprocess
+from utils.sub import run_subprocess
 from utils.load_yaml import load_subprocesses 
 
-subprocesses = load_subprocesses()
+subprocesses = load_subprocesses().get("connect")
 
 def connect_to_cluster(config):
     run_subprocess(subprocesses.get("update_kubeconfig"), config)
@@ -10,23 +10,12 @@ def connect_to_cluster(config):
     
     try:
         run_subprocess(subprocesses.get("check_helm"))
-    except subprocess.CalledProcessError:
+    except:
         run_subprocess(subprocesses.get("install_helm"), print_status=True)     
         return 
 
     try:
         run_subprocess(subprocesses.get("check_keda"))
-    except subprocess.CalledProcessError:
+    except:
         run_subprocess(subprocesses.get("install_keda"), print_status=True)
         return
-
-def run_subprocess(sub, *args, print_status=False):
-    try:
-        result = subprocess.run(sub.get("command").format(args), shell=True, check=True)
-        if print_status:
-            print("✅ "+ sub.get("success"))
-        return result
-    except subprocess.CalledProcessError:
-        if print_status:
-            print("❌ "+ sub.get("failure"))
-        return subprocess.CalledProcessError

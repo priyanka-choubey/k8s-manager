@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.metadata.name }}
+  labels:
+    app: {{ .Values.metadata.labels.app }}
+spec:
+  replicas: 3
+  {{- with .Values.spec.selector }}
+  selector:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.spec.template }}
+  template:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+    spec:
+{{- if .Values.deployment.spec.containers }}
+      containers:
+{{ toYaml .Values.deployment.spec.containers | nindent 8 }}
+{{- end }}
