@@ -1,6 +1,7 @@
 import argparse
 from modules.connect import connect_to_cluster
 from modules.deploy import deploy_manifest
+from modules.health import get_health
 
 def main():
     parser = argparse.ArgumentParser(description="Kubernetes Management CLI")
@@ -14,6 +15,7 @@ def main():
     create_parser = subparsers.add_parser("deploy", help="Create a deployment")
     create_parser.add_argument("--config", required=True, help="Path to deployment config YAML")  
     create_parser.add_argument("--name", required=True, help="Deployment name") 
+    create_parser.add_argument("--namespace", default="default")
 
     # Health check
     health_parser = subparsers.add_parser("health", help="Check deployment health")
@@ -26,7 +28,11 @@ def main():
         connect_to_cluster(args.kubeconfig)
 
     elif args.command == "deploy":
-        deploy_manifest(args.config, args.name)
+        deploy_manifest(args.config, args.name, args.namespace)
+
+    elif args.command == "health":
+        get_health(args.name, args.namespace)
+    
     else:
         parser.print_help()
 

@@ -16,6 +16,7 @@ def connect_to_cluster(config):
 
     try:
         run_subprocess(subprocesses.get("check_keda"))
+        run_subprocess(subprocesses.get("check_keda_operator"))
     except:
         run_subprocess(subprocesses.get("install_keda"), print_status=True)
         return
